@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { existsSync } from 'fs';
 import { initializeDb, initializeDatabase } from './db';
 
 import authRoutes from './routes/auth';
@@ -25,6 +27,17 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/users', usersRoutes);
+
+// Serve frontend build when available
+const frontendDistPath = path.join(__dirname, '../../frontend/dist');
+if (existsSync(frontendDistPath)) {
+  app.use(express.static(frontendDistPath));
+
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.sendFile(path.join(frontendDistPath, 'index.html'));
+  });
+}
 
 // Health check
 app.get('/api/health', (req, res) => {

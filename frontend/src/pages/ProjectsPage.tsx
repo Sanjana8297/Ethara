@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { projectAPI, usersAPI } from '../api';
 import { Project, ProjectMember } from '../types';
+import { getErrorMessage } from '../utils/getErrorMessage';
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -29,7 +30,7 @@ export default function ProjectsPage() {
         setSelectedProjectId(response.data[0].id);
       }
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to load projects');
+      setError(getErrorMessage(err.response?.data, 'Failed to load projects'));
     } finally {
       setLoading(false);
     }
@@ -47,7 +48,7 @@ export default function ProjectsPage() {
       setMembers(response.data);
       fetchAvailableUsers(projectId);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to load project members');
+      setError(getErrorMessage(err.response?.data, 'Failed to load project members'));
       setMembers([]);
     } finally {
       setMembersLoading(false);
@@ -76,7 +77,7 @@ export default function ProjectsPage() {
       setFormData({ name: '', description: '' });
       fetchProjects();
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to create project');
+      setError(getErrorMessage(err.response?.data, 'Failed to create project'));
     }
   };
 
@@ -97,7 +98,7 @@ export default function ProjectsPage() {
       fetchMembers(selectedProjectId);
       fetchAvailableUsers(selectedProjectId);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to add member');
+      setError(getErrorMessage(err.response?.data, 'Failed to add member'));
     }
   };
 
@@ -111,7 +112,7 @@ export default function ProjectsPage() {
       fetchMembers(selectedProjectId);
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to remove member');
+      setError(getErrorMessage(err.response?.data, 'Failed to remove member'));
     }
   };
 

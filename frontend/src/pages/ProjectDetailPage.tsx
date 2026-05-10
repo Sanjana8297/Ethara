@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { taskAPI, projectAPI, usersAPI } from '../api';
 import { Task, ProjectMember } from '../types';
 import { useAuth } from '../AuthContext';
+import { getErrorMessage } from '../utils/getErrorMessage';
 
 export default function ProjectDetailPage() {
   const { projectId } = useParams();
@@ -76,7 +77,7 @@ export default function ProjectDetailPage() {
       setTaskStatusDrafts(nextTaskStatusDrafts);
       setTaskCustomStatusDrafts(nextTaskCustomStatusDrafts);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to load data');
+      setError(getErrorMessage(err.response?.data, 'Failed to load data'));
     } finally {
       setLoading(false);
     }
@@ -106,7 +107,7 @@ export default function ProjectDetailPage() {
       setShowTaskForm(false);
       fetchData();
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to create task');
+      setError(getErrorMessage(err.response?.data, 'Failed to create task'));
     }
   };
 
@@ -158,7 +159,7 @@ export default function ProjectDetailPage() {
       await fetchData();
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to save all changes');
+      setError(getErrorMessage(err.response?.data, 'Failed to save all changes'));
     } finally {
       setIsSavingAll(false);
     }
@@ -172,7 +173,7 @@ export default function ProjectDetailPage() {
       setFileDescription('');
       await fetchData();
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to discard changes');
+      setError(getErrorMessage(err.response?.data, 'Failed to discard changes'));
     }
   };
 
@@ -413,7 +414,7 @@ export default function ProjectDetailPage() {
                       fetchAvailableUsers();
                       setTimeout(() => setSuccessMessage(''), 3000);
                     } catch (err: any) {
-                      setError(err.response?.data?.error || 'Failed to add member');
+                      setError(getErrorMessage(err.response?.data, 'Failed to add member'));
                     }
                   }}
                   style={{ padding: '8px 12px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}

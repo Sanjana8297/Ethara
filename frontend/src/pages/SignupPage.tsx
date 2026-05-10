@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authAPI } from '../api';
 import { useAuth } from '../AuthContext';
+import { getErrorMessage } from '../utils/getErrorMessage';
 
 export default function SignupPage() {
   const [name, setName] = useState('');
@@ -22,7 +23,7 @@ export default function SignupPage() {
       login(response.data.token, response.data.user);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Signup failed');
+      setError(getErrorMessage(err.response?.data, 'Signup failed'));
     } finally {
       setLoading(false);
     }

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { projectAPI } from '../api';
 import { Project } from '../types';
+import { getErrorMessage } from '../utils/getErrorMessage';
 
 export default function AssignedProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -18,7 +19,7 @@ export default function AssignedProjectsPage() {
       const res = await projectAPI.list();
       setProjects(res.data || []);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to load projects');
+      setError(getErrorMessage(err.response?.data, 'Failed to load projects'));
     } finally {
       setLoading(false);
     }

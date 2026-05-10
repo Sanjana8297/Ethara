@@ -1,0 +1,20 @@
+{
+  "name": "ethara",
+  "version": "1.0.0",
+  "description": "Project and task management web application",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "build": "npm run build -w backend && npm run build -w frontend",
+    "start": "npm run start -w backend",
+    "backend:dev": "npm run dev -w backend",
+    "frontend:dev": "npm run dev -w frontend"
+  },
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
